@@ -3,65 +3,89 @@ const axios = require("axios");
 
 const router = express.Router();
 
+// ========================================
+// AXIOS CONFIG
+// ========================================
+
+const API = axios.create({
+
+    baseURL: "https://api.football-data.org/v4",
+
+    headers: {
+
+        "X-Auth-Token": process.env.FOOTBALL_API_KEY
+
+    },
+
+    timeout: 15000
+
+});
+
+// ========================================
+// LIVE MATCHES
+// GET /api/matches
+// ========================================
 
 router.get("/matches", async (req, res) => {
+
     try {
-        const response = await axios.get(
-            "https://api.football-data.org/v4/matches",
-            {
-                headers: {
-                    "X-Auth-Token": process.env.FOOTBALL_API_KEY
-                }
-            }
-        );
+
+        const response = await API.get("/matches");
 
         res.json(response.data);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error.response?.data || error.message);
 
         res.status(500).json({
+
             success: false,
+
             message: "Unable to fetch matches"
+
         });
+
     }
+
 });
 
-// ========================
+// ========================================
 // ALL COMPETITIONS
-// ========================
+// GET /api/competitions
+// ========================================
 
 router.get("/competitions", async (req, res) => {
+
     try {
 
-        const response = await axios.get(
-            "https://api.football-data.org/v4/competitions",
-            {
-                headers: {
-                    "X-Auth-Token": process.env.FOOTBALL_API_KEY
-                }
-            }
-        );
+        const response = await API.get("/competitions");
 
         res.json(response.data);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error.response?.data || error.message);
 
         res.status(500).json({
+
             success: false,
+
             message: "Unable to fetch competitions"
+
         });
 
     }
-});
 
-module.exports = router;
-// ========================
+});
+// ========================================
 // LEAGUE STANDINGS
-// ========================
+// GET /api/standings/:id
+// ========================================
 
 router.get("/standings/:id", async (req, res) => {
 
@@ -69,32 +93,36 @@ router.get("/standings/:id", async (req, res) => {
 
         const { id } = req.params;
 
-        const response = await axios.get(
-            `https://api.football-data.org/v4/competitions/${id}/standings`,
-            {
-                headers: {
-                    "X-Auth-Token": process.env.FOOTBALL_API_KEY
-                }
-            }
+        const response = await API.get(
+
+            `/competitions/${id}/standings`
+
         );
 
         res.json(response.data);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error.response?.data || error.message);
 
         res.status(500).json({
+
             success: false,
+
             message: "Unable to fetch standings"
+
         });
 
     }
 
 });
-// ========================
+
+// ========================================
 // TEAMS IN A COMPETITION
-// ========================
+// GET /api/teams/:id
+// ========================================
 
 router.get("/teams/:id", async (req, res) => {
 
@@ -102,32 +130,36 @@ router.get("/teams/:id", async (req, res) => {
 
         const { id } = req.params;
 
-        const response = await axios.get(
-            `https://api.football-data.org/v4/competitions/${id}/teams`,
-            {
-                headers: {
-                    "X-Auth-Token": process.env.FOOTBALL_API_KEY
-                }
-            }
+        const response = await API.get(
+
+            `/competitions/${id}/teams`
+
         );
 
         res.json(response.data);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error.response?.data || error.message);
 
         res.status(500).json({
+
             success: false,
+
             message: "Unable to fetch teams"
+
         });
 
     }
 
 });
-// ========================
+
+// ========================================
 // TEAM DETAILS
-// ========================
+// GET /api/team/:id
+// ========================================
 
 router.get("/team/:id", async (req, res) => {
 
@@ -135,32 +167,35 @@ router.get("/team/:id", async (req, res) => {
 
         const { id } = req.params;
 
-        const response = await axios.get(
-            `https://api.football-data.org/v4/teams/${id}`,
-            {
-                headers: {
-                    "X-Auth-Token": process.env.FOOTBALL_API_KEY
-                }
-            }
+        const response = await API.get(
+
+            `/teams/${id}`
+
         );
 
         res.json(response.data);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error.response?.data || error.message);
 
         res.status(500).json({
+
             success: false,
+
             message: "Unable to fetch team details"
+
         });
 
     }
 
 });
-// ========================
+// ========================================
 // TOP SCORERS
-// ========================
+// GET /api/scorers/:id
+// ========================================
 
 router.get("/scorers/:id", async (req, res) => {
 
@@ -168,100 +203,36 @@ router.get("/scorers/:id", async (req, res) => {
 
         const { id } = req.params;
 
-        const response = await axios.get(
-            `https://api.football-data.org/v4/competitions/${id}/scorers`,
-            {
-                headers: {
-                    "X-Auth-Token": process.env.FOOTBALL_API_KEY
-                }
-            }
+        const response = await API.get(
+
+            `/competitions/${id}/scorers`
+
         );
 
         res.json(response.data);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error.response?.data || error.message);
 
         res.status(500).json({
+
             success: false,
+
             message: "Unable to fetch top scorers"
-        });
 
-    }
-
-});
-// ========================
-// TEAM DETAILS
-// ========================
-
-router.get("/team/:id", async (req, res) => {
-
-    try {
-
-        const { id } = req.params;
-
-        const response = await axios.get(
-            `https://api.football-data.org/v4/teams/${id}`,
-            {
-                headers: {
-                    "X-Auth-Token": process.env.FOOTBALL_API_KEY
-                }
-            }
-        );
-
-        res.json(response.data);
-
-    } catch (error) {
-
-        console.error(error.response?.data || error.message);
-
-        res.status(500).json({
-            success: false,
-            message: "Unable to fetch team details"
         });
 
     }
 
 });
 
-// ========================
-// TOP SCORERS
-// ========================
-
-router.get("/scorers/:id", async (req, res) => {
-
-    try {
-
-        const { id } = req.params;
-
-        const response = await axios.get(
-            `https://api.football-data.org/v4/competitions/${id}/scorers`,
-            {
-                headers: {
-                    "X-Auth-Token": process.env.FOOTBALL_API_KEY
-                }
-            }
-        );
-
-        res.json(response.data);
-
-    } catch (error) {
-
-        console.error(error.response?.data || error.message);
-
-        res.status(500).json({
-            success: false,
-            message: "Unable to fetch top scorers"
-        });
-
-    }
-
-});
-
-// ========================
+// ========================================
 // MATCH DETAILS
-// ========================
+// GET /api/match/:id
+// ========================================
 
 router.get("/match/:id", async (req, res) => {
 
@@ -269,37 +240,41 @@ router.get("/match/:id", async (req, res) => {
 
         const { id } = req.params;
 
-        const response = await axios.get(
-            `https://api.football-data.org/v4/matches/${id}`,
-            {
-                headers: {
-                    "X-Auth-Token": process.env.FOOTBALL_API_KEY
-                }
-            }
+        const response = await API.get(
+
+            `/matches/${id}`
+
         );
 
         res.json(response.data);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error.response?.data || error.message);
 
         res.status(500).json({
+
             success: false,
+
             message: "Unable to fetch match details"
+
         });
 
     }
 
 });
-// ========================
-// ALL UPCOMING MATCHES
-// ========================
+// ========================================
+// UPCOMING MATCHES
+// GET /api/upcoming
+// ========================================
 
 router.get("/upcoming", async (req, res) => {
 
     try {
 
+        // Major competitions only
         const competitions = [
 
             2021, // Premier League
@@ -307,32 +282,15 @@ router.get("/upcoming", async (req, res) => {
             2019, // Serie A
             2002, // Bundesliga
             2015, // Ligue 1
-            2003, // Eredivisie
-            2017, // Primeira Liga
-            2016, // Championship
-            2013, // Brazil Serie A
-            2001, // Champions League
-            2000, // World Cup
-            2018, // Euro
-            2152  // Copa Libertadores
+            2001  // UEFA Champions League
 
         ];
 
         const requests = competitions.map(id =>
 
-            axios.get(
+            API.get(
 
-                `https://api.football-data.org/v4/competitions/${id}/matches?status=SCHEDULED`,
-
-                {
-
-                    headers: {
-
-                        "X-Auth-Token": process.env.FOOTBALL_API_KEY
-
-                    }
-
-                }
+                `/competitions/${id}/matches?status=SCHEDULED`
 
             )
 
@@ -352,9 +310,9 @@ router.get("/upcoming", async (req, res) => {
 
         });
 
-        matches.sort((a, b) =>
+        matches.sort(
 
-            new Date(a.utcDate) - new Date(b.utcDate)
+            (a, b) => new Date(a.utcDate) - new Date(b.utcDate)
 
         );
 
@@ -368,7 +326,9 @@ router.get("/upcoming", async (req, res) => {
 
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(error.response?.data || error.message);
 
@@ -383,3 +343,9 @@ router.get("/upcoming", async (req, res) => {
     }
 
 });
+
+// ========================================
+// EXPORT ROUTER
+// ========================================
+
+module.exports = router;
