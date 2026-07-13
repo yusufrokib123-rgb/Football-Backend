@@ -295,3 +295,94 @@ router.get("/match/:id", async (req, res) => {
     }
 
 });
+// ========================
+// ALL UPCOMING MATCHES
+// ========================
+
+router.get("/upcoming", async (req, res) => {
+
+    try {
+
+        const competitions = [
+
+            2021, // Premier League
+            2014, // La Liga
+            2019, // Serie A
+            2002, // Bundesliga
+            2015, // Ligue 1
+            2003, // Eredivisie
+            2017, // Primeira Liga
+            2016, // Championship
+            2013, // Brazil Serie A
+            2001, // Champions League
+            2000, // World Cup
+            2018, // Euro
+            2152  // Copa Libertadores
+
+        ];
+
+        const requests = competitions.map(id =>
+
+            axios.get(
+
+                `https://api.football-data.org/v4/competitions/${id}/matches?status=SCHEDULED`,
+
+                {
+
+                    headers: {
+
+                        "X-Auth-Token": process.env.FOOTBALL_API_KEY
+
+                    }
+
+                }
+
+            )
+
+        );
+
+        const responses = await Promise.all(requests);
+
+        let matches = [];
+
+        responses.forEach(response => {
+
+            if (response.data.matches) {
+
+                matches.push(...response.data.matches);
+
+            }
+
+        });
+
+        matches.sort((a, b) =>
+
+            new Date(a.utcDate) - new Date(b.utcDate)
+
+        );
+
+        res.json({
+
+            success: true,
+
+            count: matches.length,
+
+            matches
+
+        });
+
+    } catch (error) {
+
+        console.error(error.response?.data || error.message);
+
+        res.status(500).json({
+
+            success: false,
+
+            message: "Unable to fetch upcoming matches"
+
+        });
+
+    }
+
+});
