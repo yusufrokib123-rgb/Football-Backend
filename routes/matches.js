@@ -418,16 +418,20 @@ router.get("/competition/:id", async (req, res) => {
 
     catch (error) {
 
-        console.error(error.response?.data || error.message);
+        console.error("Football API Error:");
 
-        res.status(500).json({
+console.error(error.response?.status);
 
-            success: false,
+console.error(error.response?.data);
 
-            message: "Unable to fetch competition."
+console.error(error.message);
 
-        });
+res.status(500).json({
 
-    }
+    success: false,
+
+    status: error.response?.status,
+
+    error: error.response?.data || error.message
 
 });
