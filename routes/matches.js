@@ -128,3 +128,36 @@ router.get("/teams/:id", async (req, res) => {
     }
 
 });
+// ========================
+// TEAM DETAILS
+// ========================
+
+router.get("/team/:id", async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const response = await axios.get(
+            `https://api.football-data.org/v4/teams/${id}`,
+            {
+                headers: {
+                    "X-Auth-Token": process.env.FOOTBALL_API_KEY
+                }
+            }
+        );
+
+        res.json(response.data);
+
+    } catch (error) {
+
+        console.error(error.response?.data || error.message);
+
+        res.status(500).json({
+            success: false,
+            message: "Unable to fetch team details"
+        });
+
+    }
+
+});
