@@ -3,9 +3,6 @@ const axios = require("axios");
 
 const router = express.Router();
 
-// ========================
-// ALL MATCHES
-// ========================
 
 router.get("/matches", async (req, res) => {
     try {
