@@ -1,25 +1,8 @@
 const express = require("express");
-const axios = require("axios");
+
+const API = require("../config/api");
 
 const router = express.Router();
-
-// ================================
-// AXIOS CONFIG
-// ================================
-
-const API = axios.create({
-
-    baseURL: "https://api.football-data.org/v4",
-
-    headers: {
-
-        "X-Auth-Token": process.env.FOOTBALL_API_KEY
-
-    },
-
-    timeout: 15000
-
-});
 
 // ================================
 // LIVE MATCHES
