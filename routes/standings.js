@@ -1,8 +1,8 @@
 const express = require("express");
-const axios = require("axios");
+
+const API = require("../config/api");
 
 const router = express.Router();
-
 // ================================
 // AXIOS CONFIG
 // ================================
