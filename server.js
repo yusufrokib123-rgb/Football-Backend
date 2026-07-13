@@ -18,6 +18,12 @@ app.use(express.json());
 // ================================
 
 app.use("/api", require("./routes/matches"));
+app.use("/api", require("./routes/competitions"));
+app.use("/api", require("./routes/standings"));
+app.use("/api", require("./routes/teams"));
+app.use("/api", require("./routes/scorers"));
+app.use("/api", require("./routes/upcoming"));
+app.use("/api", require("./routes/match"));
 
 // ================================
 // HOME ROUTE
